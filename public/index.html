@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ECOSYS — El Sistema Integral del Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --midnight: #0A0F1E;
+  --midnight-2: #111827;
+  --midnight-3: #1a2235;
+  --gold: #C9A84C;
+  --gold-light: #E8C96A;
+  --gold-dim: rgba(201,168,76,0.15);
+  --emerald: #2ECC9A;
+  --emerald-dim: rgba(46,204,154,0.12);
+  --white: #F7F8FA;
+  --gray-1: #8892A4;
+  --gray-2: #3D4A5C;
+  --danger: #E55A5A;
+  --sidebar-w: 260px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--midnight);color:var(--white);overflow-x:hidden;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--midnight-2);}
+::-webkit-scrollbar-thumb{background:var(--gray-2);border-radius:3px;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  position:fixed;left:0;top:0;width:var(--sidebar-w);height:100vh;
+  background:var(--midnight-2);border-right:1px solid var(--gray-2);
+  display:flex;flex-direction:column;z-index:100;overflow-y:auto;
+}
+.sidebar-logo{
+  padding:28px 24px 20px;border-bottom:1px solid var(--gray-2);
+}
+.sidebar-logo .brand{
+  font-family:'Playfair Display',serif;font-size:22px;font-weight:900;
+  color:var(--gold);letter-spacing:2px;
+}
+.sidebar-logo .tagline{
+  font-size:10px;color:var(--gray-1);letter-spacing:1.5px;text-transform:uppercase;
+  margin-top:3px;
+}
+.nav-section{padding:16px 0 8px;}
+.nav-label{
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--gray-1);padding:0 24px 8px;
+}
+.nav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 24px;cursor:pointer;
+  font-size:13px;font-weight:500;color:var(--gray-1);
+  border-left:3px solid transparent;
+  transition:all .2s;
+}
+.nav-item:hover{background:var(--midnight-3);color:var(--white);}
+.nav-item.active{
+  background:var(--gold-dim);color:var(--gold);
+  border-left-color:var(--gold);
+}
+.nav-item .icon{font-size:16px;width:20px;text-align:center;}
+.nav-item .badge{
+  margin-left:auto;font-size:10px;background:var(--gold);
+  color:var(--midnight);border-radius:10px;padding:1px 7px;font-weight:700;
+}
+.nav-path{
+  margin:16px 24px 8px;padding:14px;
+  background:var(--midnight-3);border-radius:8px;
+  border:1px solid var(--gray-2);
+}
+.nav-path-title{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gray-1);margin-bottom:10px;}
+.path-step{
+  display:flex;align-items:center;gap:8px;
+  font-size:11px;color:var(--gray-1);padding:4px 0;cursor:pointer;
+}
+.path-step.done{color:var(--emerald);}
+.path-step.active{color:var(--gold);font-weight:600;}
+.path-dot{width:8px;height:8px;border-radius:50%;background:var(--gray-2);flex-shrink:0;}
+.path-step.done .path-dot{background:var(--emerald);}
+.path-step.active .path-dot{background:var(--gold);}
+.path-line{width:1px;height:14px;background:var(--gray-2);margin-left:3px;}
+.sidebar-bottom{
+  margin-top:auto;padding:16px 24px;
+  border-top:1px solid var(--gray-2);
+}
+.user-pill{
+  display:flex;align-items:center;gap:10px;
+  padding:10px;background:var(--midnight-3);border-radius:8px;cursor:pointer;
+}
+.user-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--emerald));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:13px;color:var(--midnight);flex-shrink:0;
+}
+.user-name{font-size:13px;font-weight:600;}
+.user-role{font-size:10px;color:var(--gray-1);}
+
+/* ── MAIN LAYOUT ── */
+.main{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;}
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(10,15,30,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--gray-2);
+  padding:0 32px;height:62px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.topbar-left{display:flex;align-items:center;gap:16px;}
+.page-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.top-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:8px 16px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;
+  border:none;transition:all .2s;
+}
+.top-btn.ghost{background:var(--midnight-3);color:var(--gray-1);}
+.top-btn.ghost:hover{color:var(--white);background:var(--gray-2);}
+.top-btn.primary{background:var(--gold);color:var(--midnight);}
+.top-btn.primary:hover{background:var(--gold-light);}
+.top-btn.emerald{background:var(--emerald-dim);color:var(--emerald);border:1px solid rgba(46,204,154,.3);}
+
+/* ── CONTENT ── */
+.content{padding:32px;flex:1;}
+
+/* ── SCREEN ── */
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* ── CARDS & GRID ── */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.card{
+  background:var(--midnight-2);border:1px solid var(--gray-2);
+  border-radius:12px;padding:24px;
+}
+.card-gold{border-color:rgba(201,168,76,.3);background:linear-gradient(135deg,var(--midnight-2),rgba(201,168,76,.04));}
+.card-emerald{border-color:rgba(46,204,154,.3);background:linear-gradient(135deg,var(--midnight-2),rgba(46,204,154,.04));}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.card-title{font-size:13px;font-weight:600;color:var(--gray-1);letter-spacing:.5px;}
+.card-icon{font-size:20px;}
+
+/* ── STAT CARDS ── */
+.stat-value{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;line-height:1;}
+.stat-label{font-size:12px;color:var(--gray-1);margin-top:6px;}
+.stat-change{font-size:11px;margin-top:8px;}
+.stat-change.up{color:var(--emerald);}
+.stat-change.down{color:var(--danger);}
+
+/* ── SECTION HEADER ── */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.section-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;}
+.section-sub{font-size:13px;color:var(--gray-1);margin-top:3px;}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gray-1);padding:10px 14px;text-align:left;border-bottom:1px solid var(--gray-2);}
+td{padding:13px 14px;font-size:13px;border-bottom:1px solid rgba(61,74,92,.4);}
+tr:hover td{background:var(--midnight-3);}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge-gold{background:var(--gold-dim);color:var(--gold);}
+.badge-emerald{background:var(--emerald-dim);color:var(--emerald);}
+.badge-gray{background:var(--midnight-3);color:var(--gray-1);}
+.badge-danger{background:rgba(229,90,90,.12);color:var(--danger);}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{margin-top:10px;}
+.progress-header{display:flex;justify-content:space-between;font-size:12px;color:var(--gray-1);margin-bottom:6px;}
+.progress-bar{height:5px;background:var(--midnight-3);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;transition:width .6s;}
+.progress-fill.gold{background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+.progress-fill.emerald{background:linear-gradient(90deg,#1a9e75,var(--emerald));}
+.progress-fill.blue{background:linear-gradient(90deg,#3B82F6,#60A5FA);}
+
+/* ── TOOLS GRID ── */
+.tool-card{
+  background:var(--midnight-2);border:1px solid var(--gray-2);
+  border-radius:10px;padding:18px;cursor:pointer;
+  transition:all .2s;
+}
+.tool-card:hover{border-color:var(--gold);transform:translateY(-2px);}
+.tool-icon{font-size:28px;margin-bottom:10px;}
+.tool-name{font-size:13px;font-weight:600;margin-bottom:4px;}
+.tool-desc{font-size:11px;color:var(--gray-1);line-height:1.5;}
+.tool-cat{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+
+/* ── MODAL ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);
+  backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--midnight-2);border:1px solid var(--gray-2);
+  border-radius:16px;width:min(720px,90vw);max-height:80vh;
+  overflow-y:auto;padding:32px;
+}
+.modal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;}
+.modal-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;}
+.modal-close{
+  background:var(--midnight-3);border:none;color:var(--gray-1);
+  width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.modal-close:hover{color:var(--white);}
+
+/* ── FORMS ── */
+.form-group{margin-bottom:18px;}
+.form-label{font-size:12px;color:var(--gray-1);margin-bottom:6px;display:block;letter-spacing:.3px;}
+.form-input,.form-select,.form-textarea{
+  width:100%;background:var(--midnight-3);border:1px solid var(--gray-2);
+  color:var(--white);border-radius:8px;padding:11px 14px;font-size:13px;
+  font-family:'Inter',sans-serif;outline:none;
+  transition:border .2s;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold);}
+.form-textarea{resize:vertical;min-height:100px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+/* ── AI PANEL ── */
+.ai-panel{
+  background:linear-gradient(135deg,var(--midnight-2),rgba(46,204,154,.05));
+  border:1px solid rgba(46,204,154,.2);border-radius:12px;padding:24px;
+}
+.ai-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--emerald);background:var(--emerald-dim);
+  padding:4px 10px;border-radius:20px;margin-bottom:14px;
+}
+.ai-output{
+  background:var(--midnight-3);border-radius:8px;padding:16px;
+  font-size:13px;line-height:1.7;color:var(--white);min-height:100px;
+  border:1px solid var(--gray-2);
+}
+.ai-output.loading{color:var(--gray-1);}
+.typing-dots span{
+  display:inline-block;animation:blink 1.2s infinite;
+  margin:0 1px;font-size:18px;line-height:1;
+}
+.typing-dots span:nth-child(2){animation-delay:.2s;}
+.typing-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--gray-2);margin-bottom:24px;}
+.tab{
+  padding:10px 20px;font-size:13px;font-weight:500;color:var(--gray-1);
+  cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all .2s;
+}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.tab:hover{color:var(--white);}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* ── HERO DASHBOARD ── */
+.hero-strip{
+  background:linear-gradient(135deg,var(--midnight-2) 0%,rgba(201,168,76,.08) 100%);
+  border:1px solid rgba(201,168,76,.2);border-radius:16px;
+  padding:32px;margin-bottom:28px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.hero-greeting{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;}
+.hero-sub{font-size:14px;color:var(--gray-1);margin-top:6px;}
+.hero-cta{display:flex;gap:10px;}
+.pulse{
+  width:10px;height:10px;border-radius:50%;background:var(--emerald);
+  animation:pulse-anim 2s infinite;flex-shrink:0;
+}
+@keyframes pulse-anim{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+
+/* ── WHEEL OF LIFE ── */
+.wheel-container{position:relative;width:280px;height:280px;margin:0 auto;}
+.wheel-container canvas{border-radius:50%;}
+
+/* ── REVENUE CHART MINI ── */
+.mini-chart{display:flex;align-items:flex-end;gap:4px;height:60px;margin-top:14px;}
+.mini-bar{
+  flex:1;border-radius:3px 3px 0 0;
+  background:linear-gradient(0deg,var(--gold),var(--gold-light));
+  transition:height .5s;min-width:8px;
+}
+.mini-bar.low{background:var(--gray-2);}
+
+/* ── CLIENT CARD ── */
+.client-row{
+  display:flex;align-items:center;gap:14px;
+  padding:14px;background:var(--midnight-3);border-radius:10px;
+  margin-bottom:10px;cursor:pointer;transition:all .2s;
+}
+.client-row:hover{background:rgba(61,74,92,.6);}
+.client-avatar{
+  width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,var(--midnight-3),var(--gray-2));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:14px;flex-shrink:0;
+}
+.client-info{flex:1;}
+.client-name{font-size:13px;font-weight:600;}
+.client-stage{font-size:11px;color:var(--gray-1);margin-top:2px;}
+.client-next{font-size:11px;color:var(--gold);}
+
+/* ── CALENDAR MINI ── */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:10px;}
+.cal-day{
+  text-align:center;font-size:11px;padding:6px 4px;border-radius:6px;
+  cursor:pointer;
+}
+.cal-day.header{color:var(--gray-1);font-weight:600;cursor:default;}
+.cal-day:hover:not(.header){background:var(--midnight-3);}
+.cal-day.has-event{background:var(--gold-dim);color:var(--gold);}
+.cal-day.today{background:var(--gold);color:var(--midnight);font-weight:700;}
+
+/* ── NOTIFICATION ── */
+.notif-toast{
+  position:fixed;bottom:24px;right:24px;z-index:300;
+  background:var(--midnight-2);border:1px solid var(--emerald);
+  border-radius:10px;padding:14px 20px;font-size:13px;
+  display:flex;align-items:center;gap:10px;
+  animation:slide-in .3s ease;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+}
+@keyframes slide-in{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* ── SCROLLABLE LIST ── */
+.scroll-list{max-height:320px;overflow-y:auto;padding-right:4px;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);transition:transform .3s;}
+  .sidebar.open{transform:none;}
+  .main{margin-left:0;}
+  .grid-3,.grid-4{grid-template-columns:repeat(2,1fr);}
+  .grid-2{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .grid-3,.grid-4,.grid-2{grid-template-columns:1fr;}
+  .content{padding:16px;}
+  .hero-strip{flex-direction:column;gap:20px;}
+}
+
+/* ── LANDING (pre-login) ── */
+.landing{display:flex;min-height:100vh;}
+.land-left{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:60px;background:var(--midnight);
+}
+.land-right{
+  width:440px;flex-shrink:0;
+  background:var(--midnight-2);border-left:1px solid var(--gray-2);
+  display:flex;flex-direction:column;justify-content:center;padding:60px 48px;
+}
+.land-logo{
+  font-family:'Playfair Display',serif;font-size:42px;font-weight:900;
+  color:var(--gold);letter-spacing:4px;margin-bottom:8px;
+}
+.land-tagline{font-size:14px;color:var(--gray-1);letter-spacing:2px;text-transform:uppercase;margin-bottom:40px;}
+.land-headline{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,3vw,44px);font-weight:700;
+  line-height:1.2;margin-bottom:20px;
+}
+.land-headline em{color:var(--gold);font-style:normal;}
+.land-body{font-size:15px;color:var(--gray-1);line-height:1.7;max-width:520px;margin-bottom:40px;}
+.feature-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:40px;}
+.pill{
+  padding:6px 14px;border-radius:20px;font-size:12px;
+  background:var(--midnight-2);border:1px solid var(--gray-2);color:var(--gray-1);
+}
+.pill.gold{background:var(--gold-dim);border-color:rgba(201,168,76,.3);color:var(--gold);}
+.login-title{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:6px;}
+.login-sub{font-size:13px;color:var(--gray-1);margin-bottom:32px;}
+.divider{text-align:center;color:var(--gray-1);font-size:12px;margin:20px 0;position:relative;}
+.divider::before,.divider::after{content:'';position:absolute;top:50%;width:calc(50% - 30px);height:1px;background:var(--gray-2);}
+.divider::before{left:0}
+.divider::after{right:0}
+.btn{
+  width:100%;padding:13px;border:none;border-radius:8px;
+  font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;
+  font-family:'Inter',sans-serif;
+}
+.btn-gold{background:var(--gold);color:var(--midnight);}
+.btn-gold:hover{background:var(--gold-light);}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--gray-2);}
+.btn-outline:hover{border-color:var(--white);}
+.login-footer{text-align:center;font-size:12px;color:var(--gray-1);margin-top:20px;}
+.login-footer a{color:var(--gold);cursor:pointer;text-decoration:none;}
+@media(max-width:800px){
+  .landing{flex-direction:column;}
+  .land-right{width:100%;padding:40px 24px;}
+  .land-left{padding:40px 24px;}
+}
+
+/* ── IA CHAT ── */
+.chat-messages{
+  height:300px;overflow-y:auto;padding:16px;
+  background:var(--midnight-3);border-radius:8px;margin-bottom:12px;
+  border:1px solid var(--gray-2);
+}
+.msg{margin-bottom:14px;display:flex;gap:10px;}
+.msg.user{flex-direction:row-reverse;}
+.msg-bubble{
+  max-width:75%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.6;
+}
+.msg.ai .msg-bubble{background:var(--midnight-2);border:1px solid var(--gray-2);}
+.msg.user .msg-bubble{background:var(--gold-dim);border:1px solid rgba(201,168,76,.3);color:var(--white);}
+.msg-avatar{
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+}
+.msg.ai .msg-avatar{background:var(--emerald-dim);color:var(--emerald);}
+.msg.user .msg-avatar{background:var(--gold-dim);color:var(--gold);}
+.chat-input-row{display:flex;gap:8px;}
+.chat-input{
+  flex:1;background:var(--midnight-3);border:1px solid var(--gray-2);
+  color:var(--white);border-radius:8px;padding:10px 14px;font-size:13px;
+  font-family:'Inter',sans-serif;outline:none;
+}
+.chat-input:focus{border-color:var(--gold);}
+.chat-send{
+  padding:10px 20px;background:var(--gold);color:var(--midnight);
+  border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ LANDING ═══════════════════ -->
+<div id="landing-page">
+<div class="landing">
+  <div class="land-left">
+    <img src="data:image/png;base64,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" width="193" height="48" alt="ECOSYS" style="display:block;margin-bottom:8px;"/>
+    <div class="land-tagline">El Sistema Integral del Coach</div>
+    <h1 class="land-headline">
+      Todo lo que necesitas para construir<br>
+      un negocio de coaching <em>que realmente funciona</em>
+    </h1>
+    <p class="land-body">
+      ECOSYS no es un CRM con módulos de coaching. Es la primera plataforma diseñada desde adentro hacia afuera: desde quién eres como coach hasta cómo escalas tu impacto y tu ingreso. Clientes, sesiones, herramientas, contenido, pagos, comunidad y IA — en un solo lugar.
+    </p>
+    <div class="feature-pills">
+      <span class="pill gold">+ 300 Herramientas</span>
+      <span class="pill gold">IA Asistente</span>
+      <span class="pill gold">CRM de Clientes</span>
+      <span class="pill">Programas & Cursos</span>
+      <span class="pill">Sesiones y Agenda</span>
+      <span class="pill">Pagos Integrados</span>
+      <span class="pill">Comunidad</span>
+      <span class="pill">White-Label</span>
+      <span class="pill">Email Marketing</span>
+      <span class="pill">Analytics</span>
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-1);">
+        <span style="color:var(--emerald)">✓</span> Sin contratos de permanencia
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-1);">
+        <span style="color:var(--emerald)">✓</span> 14 días gratis sin tarjeta
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-1);">
+        <span style="color:var(--emerald)">✓</span> Onboarding personalizado
+      </div>
+    </div>
+  </div>
+  <div class="land-right">
+    <div class="login-title">Inicia sesión</div>
+    <div class="login-sub">Bienvenido de vuelta a tu ecosistema</div>
+    <div class="form-group">
+      <label class="form-label">Correo electrónico</label>
+      <input class="form-input" type="email" placeholder="tu@email.com" id="login-email"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Contraseña</label>
+      <input class="form-input" type="password" placeholder="••••••••" id="login-pass"/>
+    </div>
+    <button class="btn btn-gold" onclick="doLogin()">Entrar al sistema →</button>
+    <div class="divider">o</div>
+    <button class="btn btn-outline" onclick="doLogin()">Continuar con Google</button>
+    <div class="login-footer">
+      ¿No tienes cuenta? <a onclick="doLogin()">Empieza gratis 14 días</a>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════ APP SHELL ═══════════════════ -->
+<div id="app-shell" style="display:none;">
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo" style="padding:18px 20px 14px;">
+    <img src="data:image/png;base64,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" width="129" height="32" alt="ECOSYS" style="display:block;max-width:none;"/>
+    <div class="tagline" style="margin-top:5px;">Sistema Integral del Coach</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Visión General</div>
+    <div class="nav-item active" onclick="goTo('dashboard',this)">
+      <span class="icon">⚡</span> Dashboard
+    </div>
+    <div class="nav-item" onclick="goTo('ia-coach',this)">
+      <span class="icon">🤖</span> IA Asistente <span class="badge">NEW</span>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Tu Camino SER → DAR</div>
+    <div class="nav-path">
+      <div class="nav-path-title">Ruta de Desarrollo</div>
+      <div class="path-step done" onclick="goTo('ser',null)"><div class="path-dot"></div> SER — Identidad</div>
+      <div class="path-line"></div>
+      <div class="path-step done" onclick="goTo('hacer',null)"><div class="path-dot"></div> HACER — Metodología</div>
+      <div class="path-line"></div>
+      <div class="path-step active" onclick="goTo('tener',null)"><div class="path-dot"></div> TENER — Negocio</div>
+      <div class="path-line"></div>
+      <div class="path-step" onclick="goTo('dar',null)"><div class="path-dot"></div> DAR — Impacto</div>
+      <div class="path-line"></div>
+      <div class="path-step" onclick="goTo('recibir',null)"><div class="path-dot"></div> RECIBIR — Abundancia</div>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Operación</div>
+    <div class="nav-item" onclick="goTo('clientes',this)">
+      <span class="icon">👥</span> Clientes & CRM
+    </div>
+    <div class="nav-item" onclick="goTo('sesiones',this)">
+      <span class="icon">📅</span> Sesiones & Agenda
+    </div>
+    <div class="nav-item" onclick="goTo('programas',this)">
+      <span class="icon">📚</span> Programas & Cursos
+    </div>
+    <div class="nav-item" onclick="goTo('herramientas',this)">
+      <span class="icon">🧰</span> Herramientas de Coaching <span class="badge">300+</span>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Crecimiento</div>
+    <div class="nav-item" onclick="goTo('marketing',this)">
+      <span class="icon">📣</span> Marketing & Embudos
+    </div>
+    <div class="nav-item" onclick="goTo('pagos',this)">
+      <span class="icon">💳</span> Pagos & Finanzas
+    </div>
+    <div class="nav-item" onclick="goTo('comunidad',this)">
+      <span class="icon">🌐</span> Comunidad
+    </div>
+    <div class="nav-item" onclick="goTo('analytics',this)">
+      <span class="icon">📊</span> Analytics
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Configuración</div>
+    <div class="nav-item" onclick="goTo('marca',this)">
+      <span class="icon">🎨</span> Mi Marca (White-Label)
+    </div>
+    <div class="nav-item" onclick="goTo('config',this)">
+      <span class="icon">⚙️</span> Configuración
+    </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="user-pill">
+      <div class="user-avatar">RG</div>
+      <div>
+        <div class="user-name">Renzo Gallo</div>
+        <div class="user-role">Plan Ecosys Pro</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <span id="page-title-el" class="page-title">Dashboard</span>
+    </div>
+    <div class="topbar-right">
+      <button class="top-btn emerald" onclick="openModal('new-session-modal')">+ Nueva sesión</button>
+      <button class="top-btn primary" onclick="openModal('new-client-modal')">+ Nuevo cliente</button>
+      <button class="top-btn ghost">🔔</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ══ DASHBOARD ══ -->
+    <div class="screen active" id="screen-dashboard">
+      <div class="hero-strip">
+        <div>
+          <div class="hero-greeting">Buenos días, Renzo ✦</div>
+          <div class="hero-sub">Tienes 3 sesiones hoy · 2 mensajes sin leer · Tu negocio crece un 18% este mes</div>
+          <div class="hero-cta" style="margin-top:18px;">
+            <button class="top-btn primary" onclick="goTo('ia-coach',null)">🤖 Consultar IA Asistente</button>
+            <button class="top-btn ghost" onclick="goTo('sesiones',null)">Ver agenda →</button>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;color:var(--emerald);">
+          <div class="pulse"></div>
+          <span style="font-size:12px;letter-spacing:1px;">SISTEMA ACTIVO</span>
+        </div>
+      </div>
+
+      <div class="grid-4" style="margin-bottom:24px;">
+        <div class="card card-gold">
+          <div class="card-header"><div class="card-title">Clientes activos</div><div class="card-icon">👥</div></div>
+          <div class="stat-value">24</div>
+          <div class="stat-label">clientes en programas</div>
+          <div class="stat-change up">↑ +3 este mes</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Ingresos del mes</div><div class="card-icon">💰</div></div>
+          <div class="stat-value" style="color:var(--gold)">$8.4K</div>
+          <div class="stat-label">USD facturados</div>
+          <div class="stat-change up">↑ +18% vs mes anterior</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Sesiones este mes</div><div class="card-icon">📅</div></div>
+          <div class="stat-value">47</div>
+          <div class="stat-label">sesiones realizadas</div>
+          <div class="stat-change up">↑ 94% tasa de asistencia</div>
+        </div>
+        <div class="card card-emerald">
+          <div class="card-header"><div class="card-title">NPS Promedio</div><div class="card-icon">⭐</div></div>
+          <div class="stat-value" style="color:var(--emerald)">9.2</div>
+          <div class="stat-label">satisfacción de clientes</div>
+          <div class="stat-change up">↑ Top 10% coaches</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:24px;">
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Clientes Recientes</div></div>
+            <button class="top-btn ghost" style="padding:6px 12px;font-size:12px;" onclick="goTo('clientes',null)">Ver todos →</button>
+          </div>
+          <div class="client-row" onclick="openClientModal('María López')">
+            <div class="client-avatar" style="background:linear-gradient(135deg,#8B5CF6,#C4B5FD)">ML</div>
+            <div class="client-info">
+              <div class="client-name">María López</div>
+              <div class="client-stage">Etapa: HACER · Sesión 8/12</div>
+            </div>
+            <div class="client-next">Hoy 15:00</div>
+          </div>
+          <div class="client-row" onclick="openClientModal('Carlos Mendoza')">
+            <div class="client-avatar" style="background:linear-gradient(135deg,#059669,#6EE7B7)">CM</div>
+            <div class="client-info">
+              <div class="client-name">Carlos Mendoza</div>
+              <div class="client-stage">Etapa: TENER · Sesión 3/8</div>
+            </div>
+            <div class="client-next">Mañana 10:00</div>
+          </div>
+          <div class="client-row" onclick="openClientModal('Ana Torres')">
+            <div class="client-avatar" style="background:linear-gradient(135deg,#DC2626,#FCA5A5)">AT</div>
+            <div class="client-info">
+              <div class="client-name">Ana Torres</div>
+              <div class="client-stage">Etapa: SER · Sesión 1/6</div>
+            </div>
+            <div class="client-next">Jue 14:30</div>
+          </div>
+          <div class="client-row">
+            <div class="client-avatar" style="background:linear-gradient(135deg,#D97706,#FCD34D)">JR</div>
+            <div class="client-info">
+              <div class="client-name">Jorge Ramírez</div>
+              <div class="client-stage">Etapa: DAR · Sesión 11/12</div>
+            </div>
+            <div class="client-next">Vie 16:00</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Ingresos Mensuales</div></div>
+          </div>
+          <div class="mini-chart" id="revenue-chart">
+            <div class="mini-bar" style="height:40%"></div>
+            <div class="mini-bar" style="height:55%"></div>
+            <div class="mini-bar" style="height:48%"></div>
+            <div class="mini-bar" style="height:65%"></div>
+            <div class="mini-bar" style="height:72%"></div>
+            <div class="mini-bar" style="height:60%"></div>
+            <div class="mini-bar" style="height:80%"></div>
+            <div class="mini-bar" style="height:70%"></div>
+            <div class="mini-bar" style="height:88%"></div>
+            <div class="mini-bar" style="height:75%"></div>
+            <div class="mini-bar" style="height:92%"></div>
+            <div class="mini-bar" style="height:100%"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--gray-1);margin-top:8px;">
+            <span>Ene</span><span>Mar</span><span>May</span><span>Jun</span>
+          </div>
+          <div style="margin-top:20px;">
+            <div class="card-title" style="margin-bottom:10px;">Meta anual: $100K USD</div>
+            <div class="progress-wrap">
+              <div class="progress-header"><span>Progreso</span><span style="color:var(--gold)">$62K / $100K</span></div>
+              <div class="progress-bar"><div class="progress-fill gold" style="width:62%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px;">Agenda Hoy</div>
+          <div style="font-size:12px;">
+            <div style="padding:10px;background:var(--midnight-3);border-radius:8px;margin-bottom:8px;border-left:3px solid var(--gold);">
+              <div style="font-weight:600;">09:00 — María López</div>
+              <div style="color:var(--gray-1);margin-top:2px;">Sesión 8 · Visión de negocio</div>
+            </div>
+            <div style="padding:10px;background:var(--midnight-3);border-radius:8px;margin-bottom:8px;border-left:3px solid var(--emerald);">
+              <div style="font-weight:600;">11:30 — Webinar grupal</div>
+              <div style="color:var(--gray-1);margin-top:2px;">Módulo 3: Estrategia de precios</div>
+            </div>
+            <div style="padding:10px;background:var(--midnight-3);border-radius:8px;border-left:3px solid var(--gray-2);">
+              <div style="font-weight:600;">15:00 — Carlos Mendoza</div>
+              <div style="color:var(--gray-1);margin-top:2px;">Sesión 3 · Definición de nicho</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px;">Tareas Pendientes</div>
+          <div style="font-size:12px;display:flex;flex-direction:column;gap:8px;">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+              <input type="checkbox" style="accent-color:var(--gold);"> Enviar material sesión Ana Torres
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+              <input type="checkbox" checked style="accent-color:var(--gold);"> <s style="color:var(--gray-1)">Actualizar programa mes 2</s>
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+              <input type="checkbox" style="accent-color:var(--gold);"> Crear secuencia email onboarding
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+              <input type="checkbox" style="accent-color:var(--gold);"> Revisar propuesta cliente nuevo
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+              <input type="checkbox" style="accent-color:var(--gold);"> Publicar post LinkedIn jueves
+            </label>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px;">Embudo de Ventas</div>
+          <div style="font-size:12px;display:flex;flex-direction:column;gap:10px;">
+            <div>
+              <div class="progress-header"><span>Prospectos (12)</span><span>12</span></div>
+              <div class="progress-bar"><div class="progress-fill blue" style="width:100%"></div></div>
+            </div>
+            <div>
+              <div class="progress-header"><span>Llamadas demo (7)</span><span>58%</span></div>
+              <div class="progress-bar"><div class="progress-fill gold" style="width:58%"></div></div>
+            </div>
+            <div>
+              <div class="progress-header"><span>Propuestas (4)</span><span>33%</span></div>
+              <div class="progress-bar"><div class="progress-fill gold" style="width:33%;opacity:.7"></div></div>
+            </div>
+            <div>
+              <div class="progress-header"><span>Clientes cerrados (2)</span><span>17%</span></div>
+              <div class="progress-bar"><div class="progress-fill emerald" style="width:17%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ IA ASISTENTE ══ -->
+    <div class="screen" id="screen-ia-coach">
+      <div class="section-header">
+        <div>
+          <div class="section-title">IA Asistente de Coaching</div>
+          <div class="section-sub">Tu copiloto inteligente para sesiones, clientes, contenido y crecimiento</div>
+        </div>
+      </div>
+      <div class="grid-2" style="gap:24px;">
+        <div>
+          <div class="ai-panel" style="margin-bottom:20px;">
+            <div class="ai-label">✦ ECOSYS IA</div>
+            <div class="card-title" style="margin-bottom:14px;">Chat con tu Asistente</div>
+            <div class="chat-messages" id="chat-messages">
+              <div class="msg ai">
+                <div class="msg-avatar">🤖</div>
+                <div class="msg-bubble">Hola Renzo, soy tu asistente ECOSYS. Puedo ayudarte a preparar sesiones, crear contenido, analizar clientes, generar propuestas y mucho más. ¿Con qué empezamos hoy?</div>
+              </div>
+            </div>
+            <div class="chat-input-row">
+              <input class="chat-input" id="chat-input" placeholder="Escribe tu consulta..." onkeypress="if(event.key==='Enter')sendChat()"/>
+              <button class="chat-send" onclick="sendChat()">Enviar</button>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px;">Acciones Rápidas IA</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <button class="top-btn ghost" style="width:100%;justify-content:flex-start;text-align:left;" onclick="quickAction('Prepara un plan para mi sesión de hoy con María López enfocado en su visión de negocio')">📋 Preparar plan de sesión</button>
+              <button class="top-btn ghost" style="width:100%;justify-content:flex-start;" onclick="quickAction('Escríbeme 5 preguntas poderosas para descubrir creencias limitantes de un cliente')">❓ Generar preguntas poderosas</button>
+              <button class="top-btn ghost" style="width:100%;justify-content:flex-start;" onclick="quickAction('Crea un email de seguimiento post-sesión para enviar a mi cliente Carlos Mendoza')">📧 Email de seguimiento</button>
+              <button class="top-btn ghost" style="width:100%;justify-content:flex-start;" onclick="quickAction('Dame ideas para un post de LinkedIn sobre el valor del coaching de vida')">📱 Contenido para redes</button>
+              <button class="top-btn ghost" style="width:100%;justify-content:flex-start;" onclick="quickAction('Genera un reporte de progreso para el cliente Ana Torres basado en sus 3 primeras sesiones')">📊 Reporte de progreso</button>
+              <button class="top-btn ghost" style="width:100%;justify-content:flex-start;" onclick="quickAction('Crea una propuesta de valor para mi programa de coaching de 3 meses de $2000 USD')">💼 Propuesta de valor</button>
+            </div>
+          </div>
+          <div class="card card-gold">
+            <div class="card-title" style="margin-bottom:10px;">Insight del Día</div>
+            <div id="daily-insight" style="font-size:13px;line-height:1.7;color:var(--gray-1);">Cargando insight...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ CLIENTES ══ -->
+    <div class="screen" id="screen-clientes">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Clientes & CRM</div>
+          <div class="section-sub">Gestiona el ciclo de vida completo de cada cliente</div>
+        </div>
+        <button class="top-btn primary" onclick="openModal('new-client-modal')">+ Nuevo cliente</button>
+      </div>
+      <div class="grid-4" style="margin-bottom:24px;">
+        <div class="card"><div class="stat-value">24</div><div class="stat-label">Activos</div></div>
+        <div class="card"><div class="stat-value" style="color:var(--gold)">7</div><div class="stat-label">Prospectos</div></div>
+        <div class="card"><div class="stat-value" style="color:var(--emerald)">18</div><div class="stat-label">Completados</div></div>
+        <div class="card"><div class="stat-value" style="color:var(--gray-1)">3</div><div class="stat-label">Pausados</div></div>
+      </div>
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab(this,'tab-activos')">Activos (24)</div>
+        <div class="tab" onclick="switchTab(this,'tab-pipeline')">Pipeline</div>
+        <div class="tab" onclick="switchTab(this,'tab-completados')">Completados</div>
+      </div>
+      <div class="tab-content active" id="tab-activos">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Cliente</th><th>Programa</th><th>Etapa SER→DAR</th><th>Sesiones</th><th>Próxima sesión</th><th>Estado</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><b>María López</b><br><small style="color:var(--gray-1)">maria@email.com</small></td><td>Coaching Ejecutivo 6M</td><td><span class="badge badge-gold">HACER</span></td><td>8/12</td><td>Hoy 15:00</td><td><span class="badge badge-emerald">Al día</span></td><td><button class="top-btn ghost" style="padding:5px 10px;font-size:11px;">Ver →</button></td></tr>
+              <tr><td><b>Carlos Mendoza</b><br><small style="color:var(--gray-1)">carlos@email.com</small></td><td>Transformación Personal</td><td><span class="badge badge-gold">TENER</span></td><td>3/8</td><td>Mañana 10:00</td><td><span class="badge badge-emerald">Al día</span></td><td><button class="top-btn ghost" style="padding:5px 10px;font-size:11px;">Ver →</button></td></tr>
+              <tr><td><b>Ana Torres</b><br><small style="color:var(--gray-1)">ana@email.com</small></td><td>Fundamentos del Ser</td><td><span class="badge badge-gray">SER</span></td><td>1/6</td><td>Jue 14:30</td><td><span class="badge badge-gold">Nueva</span></td><td><button class="top-btn ghost" style="padding:5px 10px;font-size:11px;">Ver →</button></td></tr>
+              <tr><td><b>Jorge Ramírez</b><br><small style="color:var(--gray-1)">jorge@email.com</small></td><td>Coaching de Liderazgo</td><td><span class="badge badge-emerald">DAR</span></td><td>11/12</td><td>Vie 16:00</td><td><span class="badge badge-emerald">Excelente</span></td><td><button class="top-btn ghost" style="padding:5px 10px;font-size:11px;">Ver →</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="tab-content" id="tab-pipeline">
+        <div style="text-align:center;padding:60px;color:var(--gray-1);">
+          <div style="font-size:40px;margin-bottom:12px;">🎯</div>
+          <div style="font-size:16px;margin-bottom:8px;">Pipeline de ventas</div>
+          <div style="font-size:13px;">7 prospectos en diferentes etapas del embudo</div>
+        </div>
+      </div>
+      <div class="tab-content" id="tab-completados">
+        <div style="text-align:center;padding:60px;color:var(--gray-1);">
+          <div style="font-size:40px;margin-bottom:12px;">🏆</div>
+          <div style="font-size:16px;margin-bottom:8px;">18 clientes completados</div>
+          <div style="font-size:13px;">Con posibilidad de renovación o referidos</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ HERRAMIENTAS ══ -->
+    <div class="screen" id="screen-herramientas">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Herramientas de Coaching</div>
+          <div class="section-sub">+300 herramientas interactivas. Úsalas en sesión o envíalas a tu cliente con tu marca.</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <input class="form-input" style="width:220px;" placeholder="Buscar herramienta..."/>
+          <button class="top-btn primary">Buscar</button>
+        </div>
+      </div>
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab(this,'tools-todas')">Todas</div>
+        <div class="tab" onclick="switchTab(this,'tools-diagnostico')">Diagnóstico</div>
+        <div class="tab" onclick="switchTab(this,'tools-valores')">Valores & Identidad</div>
+        <div class="tab" onclick="switchTab(this,'tools-objetivos')">Objetivos</div>
+        <div class="tab" onclick="switchTab(this,'tools-mindset')">Mindset</div>
+        <div class="tab" onclick="switchTab(this,'tools-negocio')">Negocio</div>
+      </div>
+      <div class="tab-content active" id="tools-todas">
+        <div class="grid-4">
+          <div class="tool-card" onclick="openTool('Rueda de la Vida')">
+            <div class="tool-cat">Diagnóstico</div>
+            <div class="tool-icon">☯️</div>
+            <div class="tool-name">Rueda de la Vida</div>
+            <div class="tool-desc">Evalúa el equilibrio en las 8 áreas clave de vida del cliente.</div>
+          </div>
+          <div class="tool-card" onclick="openTool('DISC')">
+            <div class="tool-cat">Personalidad</div>
+            <div class="tool-icon">🧬</div>
+            <div class="tool-name">Perfil DISC</div>
+            <div class="tool-desc">Identifica el estilo de comportamiento y comunicación dominante.</div>
+          </div>
+          <div class="tool-card" onclick="openTool('Valores Nucleares')">
+            <div class="tool-cat">Valores & Identidad</div>
+            <div class="tool-icon">💎</div>
+            <div class="tool-name">Valores Nucleares</div>
+            <div class="tool-desc">Descubre y ordena los valores esenciales que rigen las decisiones.</div>
+          </div>
+          <div class="tool-card" onclick="openTool('Modelo GROW')">
+            <div class="tool-cat">Objetivos</div>
+            <div class="tool-icon">🌱</div>
+            <div class="tool-name">Modelo GROW</div>
+            <div class="tool-desc">Estructura de sesión: Meta, Realidad, Opciones, Voluntad.</div>
+          </div>
+          <div class="tool-card" onclick="openTool('Creencias Limitantes')">
+            <div class="tool-cat">Mindset</div>
+            <div class="tool-icon">🔓</div>
+            <div class="tool-name">Detector de Creencias</div>
+            <div class="tool-desc">Identifica y desafía patrones mentales que bloquean el avance.</div>
+          </div>
+          <div class="tool-card" onclick="openTool('Propósito de Vida')">
+            <div class="tool-cat">SER — Identidad</div>
+            <div class="tool-icon">🎯</div>
+            <div class="tool-name">Propósito de Vida</div>
+            <div class="tool-desc">El Ikigai expandido: misión, vocación, pasión y profesión.</div>
+          </div>
+          <div class="tool-card" onclick="openTool('OKR Personal')">
+            <div class="tool-cat">Objetivos</div>
+            <div class="tool-icon">📐</div>
+            <div class="tool-name">OKR Personal</div>
+            <div class="tool-desc">Define objetivos ambiciosos y resultados clave medibles.</div>
+          </div>
+          <div class="tool-card" onclick="openTool('Análisis FODA')">
+            <div class="tool-cat">Estrategia</div>
+            <div class="tool-icon">⚡</div>
+            <div class="tool-name">FODA Personal</div>
+            <div class="tool-desc">Fortalezas, Oportunidades, Debilidades y Amenazas del cliente.</div>
+          </div>
+          <div class="tool-card" onclick="openTool('Plan de 90 días')">
+            <div class="tool-cat">HACER — Acción</div>
+            <div class="tool-icon">📋</div>
+            <div class="tool-name">Plan de 90 Días</div>
+            <div class="tool-desc">Desglosa metas grandes en sprints de 90 días ejecutables.</div>
+          </div>
+          <div class="tool-card" onclick="openTool('Línea del Tiempo')">
+            <div class="tool-cat">Autobiografía</div>
+            <div class="tool-icon">🕒</div>
+            <div class="tool-name">Línea del Tiempo</div>
+            <div class="tool-desc">Mapea hitos, traumas, aprendizajes y momentos de quiebre.</div>
+          </div>
+          <div class="tool-card" onclick="openTool('Mapa de Relaciones')">
+            <div class="tool-cat">DAR — Impacto</div>
+            <div class="tool-icon">🕸️</div>
+            <div class="tool-name">Mapa de Relaciones</div>
+            <div class="tool-desc">Visualiza el ecosistema de vínculos e influencias del cliente.</div>
+          </div>
+          <div class="tool-card" onclick="openTool('Inventario de Fortalezas')">
+            <div class="tool-cat">Identidad</div>
+            <div class="tool-icon">💪</div>
+            <div class="tool-name">Inventario de Fortalezas</div>
+            <div class="tool-desc">Basado en VIA Character Strengths — 24 fortalezas de carácter.</div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" id="tools-diagnostico"><div style="padding:40px;text-align:center;color:var(--gray-1);">Filtro: Herramientas de Diagnóstico (48 herramientas)</div></div>
+      <div class="tab-content" id="tools-valores"><div style="padding:40px;text-align:center;color:var(--gray-1);">Filtro: Valores & Identidad (37 herramientas)</div></div>
+      <div class="tab-content" id="tools-objetivos"><div style="padding:40px;text-align:center;color:var(--gray-1);">Filtro: Objetivos & Planificación (55 herramientas)</div></div>
+      <div class="tab-content" id="tools-mindset"><div style="padding:40px;text-align:center;color:var(--gray-1);">Filtro: Mindset & Creencias (42 herramientas)</div></div>
+      <div class="tab-content" id="tools-negocio"><div style="padding:40px;text-align:center;color:var(--gray-1);">Filtro: Negocio de Coaching (63 herramientas)</div></div>
+    </div>
+
+    <!-- ══ PROGRAMAS ══ -->
+    <div class="screen" id="screen-programas">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Programas & Cursos</div>
+          <div class="section-sub">Crea, vende y entrega tus programas de coaching estructurados</div>
+        </div>
+        <button class="top-btn primary" onclick="openModal('new-program-modal')">+ Nuevo programa</button>
+      </div>
+      <div class="grid-3">
+        <div class="card card-gold">
+          <div style="font-size:28px;margin-bottom:12px;">🦁</div>
+          <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:6px;">Liderazgo Auténtico</div>
+          <div style="font-size:12px;color:var(--gray-1);margin-bottom:14px;">12 sesiones · 3 meses · $2,400 USD</div>
+          <div class="progress-wrap">
+            <div class="progress-header"><span>8 clientes activos</span><span style="color:var(--gold)">$19.2K</span></div>
+            <div class="progress-bar"><div class="progress-fill gold" style="width:75%"></div></div>
+          </div>
+          <div style="margin-top:14px;display:flex;gap:8px;">
+            <span class="badge badge-emerald">Activo</span>
+            <span class="badge badge-gray">12 módulos</span>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size:28px;margin-bottom:12px;">🌿</div>
+          <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:6px;">Fundamentos del SER</div>
+          <div style="font-size:12px;color:var(--gray-1);margin-bottom:14px;">6 sesiones · 6 semanas · $900 USD</div>
+          <div class="progress-wrap">
+            <div class="progress-header"><span>4 clientes activos</span><span style="color:var(--gold)">$3.6K</span></div>
+            <div class="progress-bar"><div class="progress-fill gold" style="width:45%"></div></div>
+          </div>
+          <div style="margin-top:14px;display:flex;gap:8px;">
+            <span class="badge badge-emerald">Activo</span>
+            <span class="badge badge-gray">6 módulos</span>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size:28px;margin-bottom:12px;">🚀</div>
+          <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:6px;">Escala tu Coaching</div>
+          <div style="font-size:12px;color:var(--gray-1);margin-bottom:14px;">Curso online · Autónomo · $497 USD</div>
+          <div class="progress-wrap">
+            <div class="progress-header"><span>32 inscritos</span><span style="color:var(--gold)">$15.9K</span></div>
+            <div class="progress-bar"><div class="progress-fill emerald" style="width:90%"></div></div>
+          </div>
+          <div style="margin-top:14px;display:flex;gap:8px;">
+            <span class="badge badge-emerald">En venta</span>
+            <span class="badge badge-gray">8 módulos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MARKETING ══ -->
+    <div class="screen" id="screen-marketing">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Marketing & Embudos</div>
+          <div class="section-sub">Atrae, nutre y convierte prospectos en clientes</div>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-bottom:24px;">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px;">📧 Secuencias de Email</div>
+          <div class="client-row"><div style="font-size:20px;">📬</div><div class="client-info"><div class="client-name">Bienvenida nuevos prospectos</div><div class="client-stage">7 emails · 14 días · 48% apertura</div></div><span class="badge badge-emerald">Activa</span></div>
+          <div class="client-row"><div style="font-size:20px;">🎁</div><div class="client-info"><div class="client-name">Onboarding nuevos clientes</div><div class="client-stage">5 emails · 7 días · 71% apertura</div></div><span class="badge badge-emerald">Activa</span></div>
+          <div class="client-row"><div style="font-size:20px;">🔄</div><div class="client-info"><div class="client-name">Re-engagement inactivos</div><div class="client-stage">3 emails · 21 días · 22% apertura</div></div><span class="badge badge-gray">Pausada</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px;">🎯 Páginas de Aterrizaje</div>
+          <div class="client-row"><div style="font-size:20px;">🏠</div><div class="client-info"><div class="client-name">Página principal de servicios</div><div class="client-stage">1,240 visitas · 4.8% conversión</div></div><span class="badge badge-gold">Publicada</span></div>
+          <div class="client-row"><div style="font-size:20px;">🧲</div><div class="client-info"><div class="client-name">Lead magnet: Guía del SER</div><div class="client-stage">890 visitas · 28% conversión</div></div><span class="badge badge-gold">Publicada</span></div>
+          <div class="client-row" style="cursor:pointer;" onclick="openModal('new-client-modal')"><div style="font-size:20px;">➕</div><div class="client-info"><div class="client-name" style="color:var(--gray-1)">Crear nueva página...</div></div></div>
+        </div>
+      </div>
+      <div class="ai-panel">
+        <div class="ai-label">✦ IA — Generador de Contenido</div>
+        <div class="card-title" style="margin-bottom:12px;">Genera contenido para tus redes y email</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Tipo de contenido</label>
+            <select class="form-select" id="content-type">
+              <option>Post LinkedIn</option>
+              <option>Historia Instagram</option>
+              <option>Email marketing</option>
+              <option>Guión de video</option>
+              <option>Hilo de Twitter</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tema / Ángulo</label>
+            <input class="form-input" id="content-topic" placeholder="ej: el miedo a comenzar"/>
+          </div>
+        </div>
+        <button class="top-btn emerald" onclick="generateContent()">✦ Generar con IA</button>
+        <div class="ai-output loading" id="content-output" style="margin-top:14px;">El contenido generado aparecerá aquí...</div>
+      </div>
+    </div>
+
+    <!-- ══ PAGOS ══ -->
+    <div class="screen" id="screen-pagos">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Pagos & Finanzas</div>
+          <div class="section-sub">Control total de tus ingresos como coach</div>
+        </div>
+        <button class="top-btn primary">+ Crear factura</button>
+      </div>
+      <div class="grid-4" style="margin-bottom:24px;">
+        <div class="card card-gold"><div class="stat-value">$8.4K</div><div class="stat-label">Este mes</div><div class="stat-change up">↑ +18%</div></div>
+        <div class="card"><div class="stat-value">$62K</div><div class="stat-label">Este año</div><div class="stat-change up">↑ +34%</div></div>
+        <div class="card"><div class="stat-value" style="color:var(--danger)">$1.2K</div><div class="stat-label">Pendiente de cobro</div></div>
+        <div class="card card-emerald"><div class="stat-value" style="color:var(--emerald)">$4.1K</div><div class="stat-label">Ingresos recurrentes/mes</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:14px;">Últimas transacciones</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Cliente</th><th>Concepto</th><th>Monto</th><th>Fecha</th><th>Estado</th></tr></thead>
+            <tbody>
+              <tr><td>María López</td><td>Coaching Ejecutivo — Mes 2</td><td style="color:var(--emerald)">$800</td><td>25 Jun</td><td><span class="badge badge-emerald">Pagado</span></td></tr>
+              <tr><td>Carlos Mendoza</td><td>Transformación Personal — Cuota 1</td><td style="color:var(--emerald)">$600</td><td>22 Jun</td><td><span class="badge badge-emerald">Pagado</span></td></tr>
+              <tr><td>Ana Torres</td><td>Fundamentos del SER</td><td style="color:var(--gold)">$900</td><td>20 Jun</td><td><span class="badge badge-gold">Pendiente</span></td></tr>
+              <tr><td>Jorge Ramírez</td><td>Liderazgo — Última cuota</td><td style="color:var(--emerald)">$1,200</td><td>18 Jun</td><td><span class="badge badge-emerald">Pagado</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ANALYTICS ══ -->
+    <div class="screen" id="screen-analytics">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Analytics & Reportes</div>
+          <div class="section-sub">Métricas que importan para crecer con intención</div>
+        </div>
+        <button class="top-btn ghost">Exportar PDF</button>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px;">Retención de Clientes</div>
+          <div class="stat-value" style="color:var(--emerald)">87%</div>
+          <div class="stat-label">continúan o renuevan</div>
+          <div class="progress-bar" style="margin-top:12px;"><div class="progress-fill emerald" style="width:87%"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px;">Ticket Promedio</div>
+          <div class="stat-value" style="color:var(--gold)">$1,750</div>
+          <div class="stat-label">USD por cliente</div>
+          <div class="stat-change up" style="margin-top:8px;">↑ +$350 vs trimestre anterior</div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px;">Tiempo de Cierre</div>
+          <div class="stat-value">8 días</div>
+          <div class="stat-label">promedio prospecto → cliente</div>
+          <div class="stat-change up" style="margin-top:8px;">↓ −3 días vs promedio</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MARCA ══ -->
+    <div class="screen" id="screen-marca">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Mi Marca (White-Label)</div>
+          <div class="section-sub">Personaliza ECOSYS con tu identidad visual completa</div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:18px;">Identidad Visual</div>
+          <div class="form-group"><label class="form-label">Nombre de tu práctica</label><input class="form-input" value="Renzo Gallo Coaching"/></div>
+          <div class="form-group"><label class="form-label">Slogan / Tagline</label><input class="form-input" value="Autenticidad Radical · Resultados Reales"/></div>
+          <div class="form-group"><label class="form-label">Color primario</label><input class="form-input" type="color" value="#C9A84C" style="height:44px;padding:4px;"/></div>
+          <div class="form-group"><label class="form-label">Color secundario</label><input class="form-input" type="color" value="#0A0F1E" style="height:44px;padding:4px;"/></div>
+          <button class="top-btn primary" onclick="showToast('✓ Cambios guardados')">Guardar cambios</button>
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px;">Dominio Personalizado</div>
+          <div class="form-group"><label class="form-label">Tu subdominio en ECOSYS</label><input class="form-input" value="renzogallo.ecosys.app"/></div>
+          <div class="form-group"><label class="form-label">Dominio propio (opcional)</label><input class="form-input" placeholder="coaching.tudominio.com"/></div>
+          <div class="form-group"><label class="form-label">Email de marca</label><input class="form-input" value="renzo@renzogallocoaching.com"/></div>
+          <button class="top-btn primary" onclick="showToast('✓ Configuración actualizada')">Actualizar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SESIONES ══ -->
+    <div class="screen" id="screen-sesiones">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Sesiones & Agenda</div>
+          <div class="section-sub">Planifica, realiza y documenta cada sesión de coaching</div>
+        </div>
+        <button class="top-btn primary" onclick="openModal('new-session-modal')">+ Nueva sesión</button>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px;">Próximas Sesiones</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="padding:14px;background:var(--midnight-3);border-radius:10px;border-left:3px solid var(--gold);">
+              <div style="font-weight:600;font-size:13px;">Hoy 09:00 · María López</div>
+              <div style="font-size:12px;color:var(--gray-1);margin-top:3px;">Sesión 8/12 — Visión de negocio</div>
+              <div style="margin-top:10px;display:flex;gap:8px;">
+                <button class="top-btn emerald" style="padding:6px 12px;font-size:11px;">Iniciar sesión</button>
+                <button class="top-btn ghost" style="padding:6px 12px;font-size:11px;">Preparar</button>
+              </div>
+            </div>
+            <div style="padding:14px;background:var(--midnight-3);border-radius:10px;border-left:3px solid var(--gray-2);">
+              <div style="font-weight:600;font-size:13px;">Hoy 11:30 · Webinar grupal</div>
+              <div style="font-size:12px;color:var(--gray-1);margin-top:3px;">Módulo 3 — 12 participantes</div>
+            </div>
+            <div style="padding:14px;background:var(--midnight-3);border-radius:10px;border-left:3px solid var(--gray-2);">
+              <div style="font-weight:600;font-size:13px;">Mañana 10:00 · Carlos Mendoza</div>
+              <div style="font-size:12px;color:var(--gray-1);margin-top:3px;">Sesión 3/8 — Definición de nicho</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px;">Notas de Sesión (IA)</div>
+          <div class="form-group">
+            <label class="form-label">Transcripción o resumen hablado</label>
+            <textarea class="form-textarea" id="session-notes-input" placeholder="Pega aquí la transcripción de la sesión o dicta los puntos clave..."></textarea>
+          </div>
+          <button class="top-btn emerald" onclick="processSessionNotes()">✦ Procesar con IA</button>
+          <div class="ai-output" id="session-notes-output" style="margin-top:14px;display:none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ COMUNIDAD ══ -->
+    <div class="screen" id="screen-comunidad">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Comunidad</div>
+          <div class="section-sub">Espacio de grupo para tus clientes y seguidores</div>
+        </div>
+      </div>
+      <div style="text-align:center;padding:80px;color:var(--gray-1);">
+        <div style="font-size:60px;margin-bottom:16px;">🌐</div>
+        <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--white);margin-bottom:10px;">Tu comunidad te espera</div>
+        <div style="font-size:14px;margin-bottom:24px;">Crea un espacio privado para tus clientes con foros, retos, celebraciones y recursos.</div>
+        <button class="top-btn primary" onclick="showToast('✓ Tu comunidad será creada — próximamente')">Crear mi comunidad</button>
+      </div>
+    </div>
+
+    <!-- Otras screens placeholder -->
+    <div class="screen" id="screen-ser"><div style="padding:60px;text-align:center;color:var(--gray-1);"><div style="font-size:60px;margin-bottom:16px;">🌑</div><div style="font-family:'Playfair Display',serif;font-size:24px;color:var(--white);margin-bottom:10px;">SER — Tu Identidad como Coach</div><div>Módulo completado · Ver tus declaraciones de identidad, propósito y valores</div></div></div>
+    <div class="screen" id="screen-hacer"><div style="padding:60px;text-align:center;color:var(--gray-1);"><div style="font-size:60px;margin-bottom:16px;">⚡</div><div style="font-family:'Playfair Display',serif;font-size:24px;color:var(--white);margin-bottom:10px;">HACER — Tu Metodología</div><div>Módulo completado · Tu sistema de sesiones, herramientas y protocolos</div></div></div>
+    <div class="screen" id="screen-tener"><div style="padding:60px;text-align:center;color:var(--gray-1);"><div style="font-size:60px;margin-bottom:16px;">💰</div><div style="font-family:'Playfair Display',serif;font-size:24px;color:var(--white);margin-bottom:10px;">TENER — Tu Negocio</div><div>En progreso · Estructura tu modelo de negocio, precios y sistemas</div></div></div>
+    <div class="screen" id="screen-dar"><div style="padding:60px;text-align:center;color:var(--gray-1);"><div style="font-size:60px;margin-bottom:16px;">🎁</div><div style="font-family:'Playfair Display',serif;font-size:24px;color:var(--white);margin-bottom:10px;">DAR — Tu Impacto</div><div>Próximo módulo · Amplifica tu alcance y transforma más vidas</div></div></div>
+    <div class="screen" id="screen-recibir"><div style="padding:60px;text-align:center;color:var(--gray-1);"><div style="font-size:60px;margin-bottom:16px;">🌕</div><div style="font-family:'Playfair Display',serif;font-size:24px;color:var(--white);margin-bottom:10px;">RECIBIR — Tu Abundancia</div><div>Módulo final · Escalar, delegar y vivir de tu propósito</div></div></div>
+    <div class="screen" id="screen-config"><div style="padding:60px;text-align:center;color:var(--gray-1);"><div style="font-size:60px;margin-bottom:16px;">⚙️</div><div style="font-family:'Playfair Display',serif;font-size:24px;color:var(--white);">Configuración del sistema</div></div></div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /app-shell -->
+
+<!-- ══ MODALES ══ -->
+<div class="modal-overlay" id="new-client-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nuevo Cliente</div>
+      <button class="modal-close" onclick="closeModal('new-client-modal')">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Nombre completo</label><input class="form-input" placeholder="Ana García"/></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" placeholder="ana@email.com"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Teléfono / WhatsApp</label><input class="form-input" placeholder="+57 300..."/></div>
+      <div class="form-group"><label class="form-label">Programa asignado</label>
+        <select class="form-select">
+          <option>Liderazgo Auténtico — 3 meses</option>
+          <option>Fundamentos del SER — 6 semanas</option>
+          <option>Transformación Personal — 2 meses</option>
+          <option>Personalizado</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Etapa inicial en la ruta SER→RECIBIR</label>
+      <select class="form-select">
+        <option>SER — Identidad y propósito</option>
+        <option>HACER — Metodología y acción</option>
+        <option>TENER — Negocio y estructura</option>
+        <option>DAR — Impacto y comunidad</option>
+        <option>RECIBIR — Abundancia y escala</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Notas iniciales / Contexto</label><textarea class="form-textarea" placeholder="¿Qué trajo a este cliente? ¿Qué quiere lograr?"></textarea></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button class="top-btn ghost" onclick="closeModal('new-client-modal')">Cancelar</button>
+      <button class="top-btn primary" onclick="saveClient()">Crear cliente</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="new-session-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nueva Sesión</div>
+      <button class="modal-close" onclick="closeModal('new-session-modal')">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Cliente</label>
+        <select class="form-select"><option>María López</option><option>Carlos Mendoza</option><option>Ana Torres</option><option>Jorge Ramírez</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Tipo de sesión</label>
+        <select class="form-select"><option>Individual 1:1</option><option>Grupal</option><option>Webinar</option><option>Check-in rápido</option></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Fecha</label><input class="form-input" type="date"/></div>
+      <div class="form-group"><label class="form-label">Hora</label><input class="form-input" type="time" value="09:00"/></div>
+    </div>
+    <div class="form-group"><label class="form-label">Objetivo de la sesión</label><input class="form-input" placeholder="¿Qué quieres lograr en esta sesión?"/></div>
+    <div class="form-group"><label class="form-label">Herramientas a usar</label>
+      <select class="form-select"><option>Rueda de la Vida</option><option>Modelo GROW</option><option>Plan de 90 días</option><option>Valores Nucleares</option><option>Otra...</option></select>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button class="top-btn ghost" onclick="closeModal('new-session-modal')">Cancelar</button>
+      <button class="top-btn primary" onclick="saveSession()">Agendar sesión</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="tool-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="tool-modal-title">Herramienta</div>
+      <button class="modal-close" onclick="closeModal('tool-modal')">✕</button>
+    </div>
+    <div id="tool-modal-body"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="new-program-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nuevo Programa</div>
+      <button class="modal-close" onclick="closeModal('new-program-modal')">✕</button>
+    </div>
+    <div class="form-group"><label class="form-label">Nombre del programa</label><input class="form-input" placeholder="ej: Liderazgo con Propósito"/></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Duración</label><input class="form-input" placeholder="3 meses / 12 sesiones"/></div>
+      <div class="form-group"><label class="form-label">Precio (USD)</label><input class="form-input" type="number" placeholder="2400"/></div>
+    </div>
+    <div class="form-group"><label class="form-label">Descripción</label><textarea class="form-textarea" placeholder="¿Qué transforma este programa?"></textarea></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button class="top-btn ghost" onclick="closeModal('new-program-modal')">Cancelar</button>
+      <button class="top-btn primary" onclick="saveProgram()">Crear programa</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="notif-toast" id="toast" style="display:none;">
+  <span style="color:var(--emerald)">✓</span>
+  <span id="toast-msg">Acción completada</span>
+</div>
+
+<script>
+// ── NAVIGATION ──
+function goTo(screen, el) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const target = document.getElementById('screen-'+screen);
+  if(target) target.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el) el.classList.add('active');
+  const titles = {
+    dashboard:'Dashboard',
+    'ia-coach':'IA Asistente de Coaching',
+    clientes:'Clientes & CRM',
+    sesiones:'Sesiones & Agenda',
+    programas:'Programas & Cursos',
+    herramientas:'Herramientas de Coaching',
+    marketing:'Marketing & Embudos',
+    pagos:'Pagos & Finanzas',
+    comunidad:'Comunidad',
+    analytics:'Analytics & Reportes',
+    marca:'Mi Marca (White-Label)',
+    config:'Configuración',
+    ser:'SER — Identidad',
+    hacer:'HACER — Metodología',
+    tener:'TENER — Negocio',
+    dar:'DAR — Impacto',
+    recibir:'RECIBIR — Abundancia'
+  };
+  document.getElementById('page-title-el').textContent = titles[screen]||screen;
+  if(screen==='ia-coach') loadDailyInsight();
+}
+
+// ── LOGIN ──
+function doLogin(){
+  document.getElementById('landing-page').style.display='none';
+  document.getElementById('app-shell').style.display='block';
+}
+
+// ── MODALS ──
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
+});
+
+// ── TABS ──
+function switchTab(el,contentId){
+  const parent = el.closest('.screen')||document.body;
+  el.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const allContents = el.closest('.card,div')?.parentElement?.querySelectorAll('.tab-content')||parent.querySelectorAll('.tab-content');
+  allContents.forEach(c=>c.classList.remove('active'));
+  const target = document.getElementById(contentId);
+  if(target) target.classList.add('active');
+}
+
+// ── TOAST ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.style.display='flex';
+  setTimeout(()=>t.style.display='none',3000);
+}
+
+// ── SAVE ACTIONS ──
+function saveClient(){closeModal('new-client-modal');showToast('✓ Cliente creado exitosamente');}
+function saveSession(){closeModal('new-session-modal');showToast('✓ Sesión agendada');}
+function saveProgram(){closeModal('new-program-modal');showToast('✓ Programa creado');}
+
+// ── OPEN CLIENT MODAL ──
+function openClientModal(name){showToast('Abriendo ficha de '+name);}
+
+// ── TOOL MODAL ──
+function openTool(toolName){
+  document.getElementById('tool-modal-title').textContent=toolName;
+  const bodies={
+    'Rueda de la Vida':`<p style="color:var(--gray-1);font-size:13px;margin-bottom:16px;">Evalúa cada área de 1 a 10. El resultado se grafica automáticamente y se envía al cliente con tu marca.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        ${['Salud','Relaciones','Carrera','Finanzas','Diversión','Crecimiento personal','Entorno','Propósito'].map(a=>`
+        <div style="padding:10px;background:var(--midnight-3);border-radius:8px;">
+          <div style="font-size:12px;margin-bottom:6px;">${a}</div>
+          <input type="range" min="1" max="10" value="${Math.floor(Math.random()*7)+3}" style="width:100%;accent-color:var(--gold);"/>
+        </div>`).join('')}
+      </div>
+      <button class="top-btn primary" style="margin-top:16px;width:100%;" onclick="showToast('✓ Rueda de la Vida generada en PDF');closeModal('tool-modal');">Generar reporte PDF</button>`,
+    'Modelo GROW':`<p style="color:var(--gray-1);font-size:13px;margin-bottom:16px;">Estructura tu sesión con el framework GROW.</p>
+      ${[['G — Goal','¿Cuál es el objetivo específico de esta sesión?'],['R — Reality','¿Cuál es la situación actual real?'],['O — Options','¿Qué opciones y recursos tienes disponibles?'],['W — Will','¿Qué vas a hacer, cuándo y cómo?']].map(([label,ph])=>`
+      <div class="form-group"><label class="form-label">${label}</label><textarea class="form-textarea" placeholder="${ph}" style="min-height:70px;"></textarea></div>`).join('')}
+      <button class="top-btn primary" style="width:100%;" onclick="showToast('✓ Plan GROW guardado');closeModal('tool-modal');">Guardar en ficha del cliente</button>`,
+  };
+  document.getElementById('tool-modal-body').innerHTML = bodies[toolName]||`<div style="text-align:center;padding:40px;color:var(--gray-1);"><div style="font-size:48px;margin-bottom:12px;">🧰</div><p>Herramienta "<b style="color:var(--white)">${toolName}</b>" lista para usar en sesión.</p><button class="top-btn primary" style="margin-top:16px;" onclick="showToast('Herramienta iniciada');closeModal('tool-modal');">Iniciar herramienta</button></div>`;
+  openModal('tool-modal');
+}
+
+// ── IA CHAT ──
+// La llamada ahora va a nuestro propio backend (/api/chat), que guarda
+// la API key de Anthropic de forma segura en el servidor (variable de entorno).
+// El navegador NUNCA ve la API key.
+async function callClaude(prompt, system=''){
+  const res = await fetch('/api/chat',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      prompt,
+      system: system||'Eres un asistente experto para coaches profesionales. Responde en español, de forma directa, práctica y aplicable. Sé conciso pero poderoso.'
+    })
+  });
+  if(!res.ok){
+    return 'No se pudo obtener respuesta (error del servidor).';
+  }
+  const d=await res.json();
+  return d.reply||'No se pudo obtener respuesta.';
+}
+
+async function sendChat(){
+  const input=document.getElementById('chat-input');
+  const msg=input.value.trim();
+  if(!msg)return;
+  input.value='';
+  const msgs=document.getElementById('chat-messages');
+  msgs.innerHTML+=`<div class="msg user"><div class="msg-avatar">RG</div><div class="msg-bubble">${msg}</div></div>`;
+  msgs.innerHTML+=`<div class="msg ai" id="typing-msg"><div class="msg-avatar">🤖</div><div class="msg-bubble"><div class="typing-dots"><span>•</span><span>•</span><span>•</span></div></div></div>`;
+  msgs.scrollTop=msgs.scrollHeight;
+  const reply=await callClaude(`Contexto: Soy Renzo Gallo, coach y speaker colombiano, 52 años, dueño de una agencia de marketing y un festival. Tengo mi framework SER→HACER→TENER→DAR→RECIBIR. Consulta: ${msg}`);
+  document.getElementById('typing-msg').outerHTML=`<div class="msg ai"><div class="msg-avatar">🤖</div><div class="msg-bubble">${reply.replace(/\n/g,'<br>')}</div></div>`;
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+async function quickAction(prompt){
+  goTo('ia-coach',null);
+  document.getElementById('chat-input').value=prompt;
+  setTimeout(sendChat,300);
+}
+
+async function loadDailyInsight(){
+  const el=document.getElementById('daily-insight');
+  if(el.dataset.loaded)return;
+  el.dataset.loaded='1';
+  el.textContent='Generando insight del día...';
+  const r=await callClaude('Dame UN insight poderoso para un coach hoy. Máximo 3 frases. Que sea profundo, no un cliché.');
+  el.textContent=r;
+}
+
+async function generateContent(){
+  const type=document.getElementById('content-type').value;
+  const topic=document.getElementById('content-topic').value||'autenticidad en el coaching';
+  const out=document.getElementById('content-output');
+  out.textContent='Generando...';out.classList.add('loading');
+  const r=await callClaude(`Crea un ${type} sobre el tema: "${topic}". Para un coach auténtico que no vende promesas vacías. Estilo directo, poderoso, sin florituras motivacionales baratas.`);
+  out.innerHTML=r.replace(/\n/g,'<br>');out.classList.remove('loading');
+}
+
+async function processSessionNotes(){
+  const notes=document.getElementById('session-notes-input').value;
+  if(!notes){showToast('Escribe o pega las notas primero');return;}
+  const out=document.getElementById('session-notes-output');
+  out.style.display='block';out.textContent='Procesando con IA...';
+  const r=await callClaude(`Procesa estas notas de sesión de coaching y entrega: 1) Resumen ejecutivo, 2) Compromisos del cliente, 3) Próximos pasos, 4) Preguntas para la próxima sesión.\n\nNotas: ${notes}`);
+  out.innerHTML=r.replace(/\n/g,'<br>');
+}
+</script>
+</body>
+</html>
