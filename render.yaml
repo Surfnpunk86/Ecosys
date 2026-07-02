@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: ecosys-platform
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: ANTHROPIC_API_KEY
+        sync: false          # Howard lo ingresa manualmente en el dashboard de Render
+      - key: JWT_SECRET
+        generateValue: true  # Render genera uno aleatorio seguro automáticamente
+      - key: JWT_EXPIRES_IN
+        value: 8h
+      - key: ADMIN_NAME
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD_HASH
+        sync: false
